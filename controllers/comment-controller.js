@@ -23,6 +23,33 @@ const commentController = {
             .catch(err => res.json(err));
     },
 
+    addReply({ params, body }, res) {
+        Comment.findOneAndUpdate(
+            { _id: params.commentId },
+            { $push: { replies: body }}, // push allows for duplicates, you can also use $addtoset to have same functionality, but not allow dupes
+            { new: true } // this optional property tells mongoose to return the updated document
+        )
+        .then(dbPizzaData => {
+            if (!dbPizzaData) {
+                res.status(404).json({ message: 'No pizza found with this id!' });
+                return;
+            }
+            res.json(dbPizzaData);
+        })
+        .catch(err => res.json(err));
+    },
+
+    // remove reply
+    removeReply({ params }, res) {
+        Comment.findOneAndUpdate(
+            { _id: params.commentId },
+            { $pull: { replies: { replyId: params.replyId }}},
+            { new: true } // this optional property tells mongoose to return the updated document
+        )
+        .then(dbPizzaData => res.json(dbPizzaData))
+        .catch(err => res.json(err));
+    },
+
     // remove comment from pizza
     removeComment({ params }, res) {
         Comment.findOneAndDelete({ _id: params.commentId })

@@ -153,8 +153,8 @@ function handleNewReplySubmit(event) {
 
   const formData = { writtenBy, replyBody };
 
-  fetch(`/api/comment/${pizzaId}`, {
-    method: 'POST',
+  fetch(`/api/comments/${pizzaId}/${commentId}`, {
+    method: 'PUT',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
@@ -168,8 +168,8 @@ function handleNewReplySubmit(event) {
 
       response.json();
     })
-    .then(commentResponse => {
-      console.log(commentResponse);
+    .then(replyResponse => {
+      console.log(replyResponse);
       location.reload();
     })
     .catch(err => {
