@@ -27,7 +27,7 @@ const commentController = {
         Comment.findOneAndUpdate(
             { _id: params.commentId },
             { $push: { replies: body }}, // push allows for duplicates, you can also use $addtoset to have same functionality, but not allow dupes
-            { new: true } // this optional property tells mongoose to return the updated document
+            { new: true, runValidators: true } // this optional property tells mongoose to return the updated document
         )
         .then(dbPizzaData => {
             if (!dbPizzaData) {
